@@ -18,12 +18,12 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
 
-  const [searchText, setSearchText] = useState('')
+  // const [searchText, setSearchText] = useState('')
   const [posts, setPosts] = useState([])
 
-  const handleSearchChange = (e) => {
+  // const handleSearchChange = (e) => {
 
-  }
+  // }
 
   useEffect(() => {
     const fetchPosts = async() => {
@@ -31,7 +31,6 @@ const Feed = () => {
       const data = await response.json()
       setPosts(data)
     }
-    console.log(posts)
     fetchPosts()
   }, [])
 
@@ -41,8 +40,8 @@ const Feed = () => {
         <input
           type="text"
           placeholder="Search for a tag or a username"
-          value={searchText}
-          onChange={handleSearchChange}
+          // value={searchText}
+          // onChange={handleSearchChange}
           required
           className="search_input peer"
         />
