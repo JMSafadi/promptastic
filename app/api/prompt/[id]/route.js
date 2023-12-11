@@ -19,7 +19,7 @@ export const GET = async(req, { params: { id } }) => {
 
 //  PATCH 
 export const PATCH = async(req, { params: { id } }) => {
-  const { prompt, tag } = await req.json()
+  const { prompt, tag, likes } = await req.json()
 
   try {
     await connectToDB()
@@ -29,6 +29,7 @@ export const PATCH = async(req, { params: { id } }) => {
 
     existingPrompt.prompt = prompt
     existingPrompt.tag = tag
+    existingPrompt.likes = likes + 1
 
     await existingPrompt.save()
     return new Response(JSON.stringify(existingPrompt), { status: 200 })

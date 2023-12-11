@@ -29,7 +29,9 @@ const Feed = () => {
     const fetchPosts = async() => {
       const response = await fetch('/api/prompt')
       const data = await response.json()
-      setPosts(data)
+      const sotredPosts = data.sort((a, b) => b.likes - a.likes)
+      setPosts(sotredPosts)
+      console.log(posts)
     }
     fetchPosts()
   }, [])
