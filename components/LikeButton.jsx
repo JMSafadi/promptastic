@@ -24,7 +24,7 @@ const LikeButton = ({ post }) => {
     }
   }, [])
 
-
+  const likeImg = isLiked ? '/assets/icons/love-like-black.svg' : '/assets/icons/love-like.svg'
 
   const handleLikeClick = async () => {
     if (!session) {
@@ -67,7 +67,7 @@ const LikeButton = ({ post }) => {
   return (
     <div className="flex cursor-pointer gap-2">
       <Image 
-        src={isLiked ? '/assets/icons/love-like-black.svg' : '/assets/icons/love-like.svg'}
+        src={likeImg}
         width={15} 
         height={15}
         alt="like-button"
