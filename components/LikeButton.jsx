@@ -8,22 +8,23 @@ import { useEffect, useState } from "react"
 const LikeButton = ({ post }) => {
 
   const { data: session } = useSession()
-  const [isLiked, setIsLiked] = useState(() => {
-    const storedIsLiked = JSON.parse(window.localStorage.getItem(`isLiked_${post._id}`))
-    return storedIsLiked != null ? storedIsLiked : false
-  })
   const [likes, setLikes] = useState(post.likes)
+  const [isLiked, setIsLiked] = useState(null)
 
   useEffect(() => {
     const storedIsLiked = JSON.parse(window.localStorage.getItem(`isLiked_${post._id}`))
-    if (storedIsLiked === null) {
-      window.localStorage.setItem(`isLiked_${post.id}`, JSON.stringify(true))
-      setIsLiked(true)
-    }
+    console.log(storedIsLiked)
+    setIsLiked(storedIsLiked)
+    }, [])
+  
+
+  useEffect(() => {
     if(!session) {
       setIsLiked(false)
     }
   }, [])
+
+
 
   const handleLikeClick = async () => {
     if (!session) {
