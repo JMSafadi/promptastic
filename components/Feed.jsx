@@ -1,6 +1,7 @@
 'use client'
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import PromptCard from "./PromptCard"
+import LoadingSpinner from "./LoadingSpinner"
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return(
@@ -20,6 +21,7 @@ const Feed = () => {
 
   // const [searchText, setSearchText] = useState('')
   const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   // const handleSearchChange = (e) => {
 
@@ -32,9 +34,11 @@ const Feed = () => {
       const sotredPosts = data.sort((a, b) => b.likes - a.likes)
       setPosts(sotredPosts)
       console.log(posts)
+      setLoading(false)
     }
     fetchPosts()
   }, [])
+
 
   return (
     <section className="feed">
@@ -48,10 +52,16 @@ const Feed = () => {
           className="search_input peer"
         />
       </form>
-      <PromptCardList
-        data={posts}
-        handleTagClick={() => {}}
-      />
+      {
+        loading 
+        ?
+        <LoadingSpinner/> 
+        :
+        <PromptCardList
+          data={posts}
+          handleTagClick={() => {}}
+        />
+      }
     </section>
   )
 }

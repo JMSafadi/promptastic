@@ -3,13 +3,15 @@ import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Profile from "@components/Profile"
+import LoadingSpinner from "@components/LoadingSpinner"
+import { PropagateLoader } from "react-spinners"
 
 
 const MyProfile = () => {
 
   const router = useRouter()
   const { data: session } = useSession()
-
+  const [loading, setLoading] = useState(true)
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -17,13 +19,17 @@ const MyProfile = () => {
       const response = await fetch(`/api/users/${session?.user.id}/posts`)
       const data = await response.json()
       setPosts(data)
+      setLoading(false)
     }
-    console.log(posts)
-
     if(session?.user.id)
     fetchPosts()
 
   }, [])
+
+  useEffect(() => {
+    console.log(loading)
+  }, [loading])
+  
 
   const handleEdit = (post) => {
     router.push(`/update-prompt?id=${post._id}`)
@@ -47,13 +53,21 @@ const MyProfile = () => {
   }
 
   return (
-    <Profile
-      name='My'
-      desc='Welcome to your personalized profile page'
-      data={posts}
-      handleEdit={handleEdit}
-      handleDelete={handleDelete}
-    />
+    <div>
+      {
+        loading 
+        ? 
+        <LoadingSpinner/>
+        :
+        <Profile
+          name='My'
+          desc='Welcome to your personalized profile page'
+          data={posts}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+        />
+      }
+    </div>
   )
 }
 

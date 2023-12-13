@@ -6,11 +6,11 @@ import Image from "next/image"
 import LikeButton from "./LikeButton"
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete, showLikeButton }) => {
-
+  
   const [copied, setCopied] = useState('');
   const { data: session } = useSession()
   const pathName = usePathname()
-
+  
   const handleCopy = () => {
     setCopied(post.prompt)
     navigator.clipboard.writeText(post.prompt)
