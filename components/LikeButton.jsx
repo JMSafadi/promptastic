@@ -9,20 +9,21 @@ const LikeButton = ({ post }) => {
 
   const { data: session } = useSession()
   const [likes, setLikes] = useState(post.likes)
-  const [isLiked, setIsLiked] = useState(null)
+  const [isLiked, setIsLiked] = useState(() => {
+    const storedIsLiked = JSON.parse(window.localStorage.getItem(`isLiked_${post._id}`))
+    return storedIsLiked != null ? storedIsLiked : false
+  })
 
   useEffect(() => {
     const storedIsLiked = JSON.parse(window.localStorage.getItem(`isLiked_${post._id}`))
-    console.log(storedIsLiked)
-    setIsLiked(storedIsLiked)
-    }, [])
-  
+    setIsLiked(storedIsLiked != null ? storedIsLiked : false)
+    console.log(isLiked)
 
-  useEffect(() => {
     if(!session) {
       setIsLiked(false)
     }
-  }, [])
+
+    }, [])
 
   const likeImg = isLiked ? '/assets/icons/love-like-black.svg' : '/assets/icons/love-like.svg'
 
