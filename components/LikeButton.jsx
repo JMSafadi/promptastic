@@ -9,14 +9,11 @@ const LikeButton = ({ post }) => {
 
   const { data: session } = useSession()
   const [likes, setLikes] = useState(post.likes)
-  const [isLiked, setIsLiked] = useState(() => {
-    const storedIsLiked = JSON.parse(window.localStorage.getItem(`isLiked_${post._id}`))
-    return storedIsLiked != null ? storedIsLiked : false
-  })
+  const [isLiked, setIsLiked] = useState(null)
 
   useEffect(() => {
-    const storedIsLiked = JSON.parse(window.localStorage.getItem(`isLiked_${post._id}`))
-    setIsLiked(storedIsLiked != null ? storedIsLiked : false)
+    const storedIsLiked = JSON.parse(localStorage.getItem(`isLiked_${post._id}`))
+    setIsLiked(storedIsLiked)
     console.log(isLiked)
 
     if(!session) {
@@ -46,7 +43,7 @@ const LikeButton = ({ post }) => {
       )
       setIsLiked(prevIsLiked => ! prevIsLiked)
       setLikes((prevLikes) => prevLikes + 1)
-      window.localStorage.setItem(`isLiked_${post._id}`, JSON.stringify(true))
+      localStorage.setItem(`isLiked_${post._id}`, JSON.stringify(true))
       } else {
         const response = await fetch(`/api/prompt/${post._id}`, {
           method: 'PATCH',
@@ -58,7 +55,7 @@ const LikeButton = ({ post }) => {
         })
       setIsLiked(prevIsLiked => ! prevIsLiked)
       setLikes((prevLikes) => prevLikes - 1)
-      window.localStorage.setItem(`isLiked_${post._id}`, JSON.stringify(false))
+      localStorage.setItem(`isLiked_${post._id}`, JSON.stringify(false))
       }
     } catch (error) {
       console.log(error)
