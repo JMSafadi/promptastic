@@ -2,7 +2,6 @@
 
 import { signIn, useSession } from "next-auth/react"
 import Image from "next/image"
-import { Router } from "next/router"
 import { useEffect, useState } from "react"
 
 const LikeButton = ({ post }) => {
@@ -14,12 +13,9 @@ const LikeButton = ({ post }) => {
   useEffect(() => {
     const storedIsLiked = JSON.parse(localStorage.getItem(`isLiked_${post._id}`))
     setIsLiked(storedIsLiked)
-    console.log(isLiked)
-
     if(!session) {
       setIsLiked(false)
     }
-
     }, [])
 
   const likeImg = isLiked ? '/assets/icons/love-like-black.svg' : '/assets/icons/love-like.svg'

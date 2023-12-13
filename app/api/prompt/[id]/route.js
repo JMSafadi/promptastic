@@ -29,7 +29,7 @@ export const PATCH = async(req, { params: { id } }) => {
 
     existingPrompt.prompt = prompt
     existingPrompt.tag = tag
-    existingPrompt.likes = likes + 1
+    existingPrompt.likes = likes
 
     await existingPrompt.save()
     return new Response(JSON.stringify(existingPrompt), { status: 200 })
