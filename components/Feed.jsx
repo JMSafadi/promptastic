@@ -19,13 +19,23 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
 
-  // const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState('')
   const [posts, setPosts] = useState([])
+  const [filteredPosts, setFilteredPosts] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // const handleSearchChange = (e) => {
+  const handleSearchChange = (e) => {
+    const text = e.target.value
+    setSearchText(text)
 
-  // }
+    const filteredPosts = posts.filter(post => {
+      const promptMatches = post.prompt.toLowerCase().includes(text.toLowerCase())
+      const tagsArray = post.tag.split('#').filter(tag => tag.trim() !== '')
+      const tagsMatch = tagsArray.some(tag => tag.toLowerCase().includes(text.toLowerCase()))
+      return promptMatches || tagsMatch
+    })
+    setFilteredPosts(filteredPosts)
+  }
 
   useEffect(() => {
     const fetchPosts = async() => {
@@ -33,7 +43,6 @@ const Feed = () => {
       const data = await response.json()
       const sotredPosts = data.sort((a, b) => b.likes - a.likes)
       setPosts(sotredPosts)
-      console.log(posts)
       setLoading(false)
     }
     fetchPosts()
@@ -45,9 +54,10 @@ const Feed = () => {
       <form className="relative w-full flexcenter">
         <input
           type="text"
-          placeholder="Search for a tag or a username"
-          // value={searchText}
-          // onChange={handleSearchChange}
+          autoFocus
+          placeholder="Search for a key word or tag"
+          value={searchText}
+          onChange={handleSearchChange}
           required
           className="search_input peer"
         />
@@ -55,12 +65,25 @@ const Feed = () => {
       {
         loading 
         ?
-        <LoadingSpinner/> 
+        <LoadingSpinner/>
         :
-        <PromptCardList
-          data={posts}
-          handleTagClick={() => {}}
-        />
+        <>
+          {searchText ? 
+          (filteredPosts.length > 0 ? 
+            (
+              // If exits an user search, and there are matches with a post: render filtered posts.
+              <PromptCardList data={filteredPosts} handleTagClick={() => {}} />
+              ) : 
+              // If exists an user search, and there are not matches with a post: render 'there are no matches'.
+              <p className="my-10 font-satoshi font-semibold text-sm">Unfortunately there are no matches with your search.</p>
+              )
+              : 
+              (
+            // If doesn't exists an user search: render all posts.
+            <PromptCardList data={posts} handleTagClick={() => {}} />
+          )
+          }
+        </>
       }
     </section>
   )
